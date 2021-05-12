@@ -1,18 +1,11 @@
 #include <memory>
 
-/*
- Compile this code like this:
-
- g++ -ggdb shared_pointer.cpp -o shared_pointer
-
- */
-
 using namespace std;
 
 class ExampleObj {
 public:
     int data[100];
-    ExampleObj *next;
+    shared_ptr<ExampleObj> next;
     
     ~ExampleObj() {
         printf("ExampleObj memory freed\n");
@@ -34,12 +27,22 @@ int main(int argc, char** argv) {
 
     printf("Activity 1\n");
     
-    ExampleObj* holder = new ExampleObj();
-    holder->next = new ExampleObj();
+    shared_ptr<ExampleObj> holder = make_shared<ExampleObj>();
+    holder->next = make_shared<ExampleObj>();
     holder = nullptr;
 
     printf("Activity 2\n");
     
-    // write your solution here
+    shared_ptr<ExampleObj> a = make_shared<ExampleObj>();
+    shared_ptr<ExampleObj> b = make_shared<ExampleObj>();
+    shared_ptr<ExampleObj> c = make_shared<ExampleObj>();
+    a->next = b;
+    b->next = c;
+    c->next = a;
+    b = nullptr;
+    c = nullptr;
+    // in a better world, this would free all three
+    a = nullptr;
+
 
 }

@@ -4,14 +4,17 @@
 #include "forth/forth_embed.h"
 
 void test0_oneforth(CuTest *tc) {
+  //  printf("beginning of test 0\n");
     initialize_forths();
     int pid = create_forth(".\" hello\" ");
     struct run_output result = run_forth_until_event(pid);
     CuAssertIntEquals(tc, FCONTINUE_INPUT_DONE, result.result_code);
     CuAssertStrEquals(tc, "hello", result.output);
+   //printf("ened of test 0\n");
 }
 
 void test1_twoforths(CuTest *tc) {
+    //  printf("beginning of test 1\n");
     initialize_forths();
     // this forth is being set to use binary numbers
     int pid = create_forth(" 2 BASE ! 1 1 + . ");
@@ -23,9 +26,11 @@ void test1_twoforths(CuTest *tc) {
     result = run_forth_until_event(pid2);
     CuAssertIntEquals(tc, FCONTINUE_INPUT_DONE, result.result_code);
     CuAssertStrEquals(tc, "2 ", result.output);
+   //  printf("ened of test 1\n");
 }
 
 void test2_yields(CuTest *tc) {
+   // printf("beginning of tet 2\n");
     initialize_forths();
     int pid = create_forth("2 1 . YIELD .");
     int pid2 = create_forth("4 3 . YIELD .");
@@ -41,9 +46,11 @@ void test2_yields(CuTest *tc) {
     result = run_forth_until_event(pid2);
     CuAssertIntEquals(tc, FCONTINUE_INPUT_DONE, result.result_code);
     CuAssertStrEquals(tc, "4 ", result.output);
+   // printf("end of test 2\n");
 }
 
 void test3_page_count(CuTest *tc) {
+   // printf("start of test 3\n");
     initialize_forths();
 
     CuAssertIntEquals(tc, 0, get_used_pages_count());
@@ -66,6 +73,7 @@ void test3_page_count(CuTest *tc) {
     result = run_forth_until_event(pid2);
     CuAssertIntEquals(tc, FCONTINUE_INPUT_DONE, result.result_code);
     CuAssertIntEquals(tc, 9, get_used_pages_count());
+  //  printf("end of test 3\n");
 }
 
 // this test is designed to pass whether or not fork actually pushes a
@@ -73,6 +81,7 @@ void test3_page_count(CuTest *tc) {
 // without that value to differentiate, the parent and the children
 // must act identically
 void test4_identical_fork(CuTest *tc) {
+   // printf("start of test 4\n");
     initialize_forths();
     int parent_id = create_forth("20 20 FORK DROP . ");
     struct run_output result = run_forth_until_event(parent_id);
@@ -82,6 +91,7 @@ void test4_identical_fork(CuTest *tc) {
     CuAssertStrEquals(tc, "20 ", result.output);
     result = run_forth_until_event(parent_id);
     CuAssertStrEquals(tc, "20 ", result.output);
+   // printf("end of test 4\n");
 }
 
 void test5_fork_return(CuTest *tc) {
@@ -214,8 +224,8 @@ int main(int argc, char *argv[]) {
     // them out and add them back one step at a time
     
     SUITE_ADD_TEST(suite, test0_oneforth); 
-    /*    SUITE_ADD_TEST(suite, test1_twoforths);
-    SUITE_ADD_TEST(suite, test2_yields);
+    SUITE_ADD_TEST(suite, test1_twoforths);
+      SUITE_ADD_TEST(suite, test2_yields);
     SUITE_ADD_TEST(suite, test3_page_count);
     SUITE_ADD_TEST(suite, test4_identical_fork);
     SUITE_ADD_TEST(suite, test5_fork_return);
@@ -223,7 +233,7 @@ int main(int argc, char *argv[]) {
     SUITE_ADD_TEST(suite, test7_copy_on_write);
     SUITE_ADD_TEST(suite, test8_copy_on_write_parent_edit);
     SUITE_ADD_TEST(suite, test9_double_fork_copy_on_write);
-    */                                  
+                                     
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);
     CuSuiteDetails(suite, output);

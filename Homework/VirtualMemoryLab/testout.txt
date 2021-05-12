@@ -1,0 +1,3 @@
+finished loading starter forth
+OUTPUT: 4999 5000 finished successfully 
+done
